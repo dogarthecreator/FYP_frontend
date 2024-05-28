@@ -3,37 +3,30 @@ html {
   padding: 0;
 }
 body {
-  background-color: #343434;
+  background-color: #1a1a1a; /* Updated background color */
   padding: 0;
   margin: 0;
   height: auto;
-  /* overflow: hidden; */
 }
+
 .MuiSlider-thumb {
   color: white;
-  border: #9ffe27;
-  border: 3px solid #9ffe27;
+  border: #ff9800; /* Updated border color */
+  border: 3px solid #ff9800; /* Updated border color */
 }
+
 .MuiSlider-rail {
-  color: white;
+  color: #4a4a4a; /* Updated rail color */
 }
+
 .MuiSlider-track {
-  color: #9ffe27;
+  color: #ff9800; /* Updated track color */
 }
+
 .c-pointer {
   cursor: pointer;
 }
-video::-webkit-media-controls-fullscreen-button {
-  display: none;
-}
-video::-webkit-media-controls-play-button {}
-video::-webkit-media-controls-timeline {}
-video::-webkit-media-controls-current-time-display{}
-video::-webkit-media-controls-time-remaining-display {}
-video::-webkit-media-controls-mute-button {}
-video::-webkit-media-controls-toggle-closed-captions-button {}
-video::-webkit-media-controls-volume-slider { display: none;}
-audio::-webkit-media-controls-volume-slider { display: none;}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -41,15 +34,15 @@ audio::-webkit-media-controls-volume-slider { display: none;}
 
 ::-webkit-scrollbar-track {
   border-radius: 10px;
-  background: #f1f1f100;
+  background: #2c2c2c; /* Updated track color */
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
   height: 20px;
-  background: #0805023a;
+  background: #ff9800; /* Updated thumb color */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0805023a;
+  background: #ff9800; /* Updated thumb hover color */
 }

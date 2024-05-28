@@ -10,6 +10,15 @@ const showNotification = (type, message) => {
     draggable: true,
     progress: undefined,
     theme: 'colored',
+    style: {
+      backgroundColor: '#F8F8F8', // Light background color for the toast
+      color: '#343434', // Dark text color
+      border: '1px solid #343434', // Border color
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)', // Subtle shadow for depth
+    },
+    progressStyle: {
+      backgroundColor: '#343434', // Progress bar color
+    },
   };
   if (type === 'error') {
     toast.error(message, style);

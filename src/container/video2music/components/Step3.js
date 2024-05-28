@@ -1,6 +1,18 @@
 import { Box, Slider, Typography } from '@mui/material';
 import React, { useRef, useEffect } from 'react';
 
+const colors = {
+  white: '#f8f9fa',
+  lightGray: '#f8f8f8', // Updated light gray
+  gray: '#e9ecef',
+  mediumGray: '#dee2e6',
+  midDarkGray: '#ced4da',
+  darkGray: '#adb5bd',
+  darkerGray: '#6c757d',
+  darkestGray: '#495057',
+  black: '#212529',
+};
+
 const Step3 = ({
   activeStep,
   handleVolumeChange,
@@ -77,11 +89,12 @@ const Step3 = ({
           p={4}
           border={2}
           borderRadius="24px"
-          bgcolor="#1e1e1e"
-          borderColor="#9FFE27"
+          bgcolor={colors.lightGray} // Updated background color
+          borderColor={colors.darkerGray} // Updated border color
+          color={colors.black} // Updated text color
           height="auto"
         >
-          <Typography mb={4}>
+          <Typography mb={4} color={colors.black}>
             Use our specialized volume rocker to adjust the volume according to
             your liking.
           </Typography>
@@ -92,6 +105,17 @@ const Step3 = ({
             }}
             min={0}
             max={100}
+            sx={{
+              '& .MuiSlider-thumb': {
+                color: colors.black, // Updated thumb color
+              },
+              '& .MuiSlider-rail': {
+                color: colors.gray, // Updated rail color
+              },
+              '& .MuiSlider-track': {
+                color: colors.black, // Updated track color
+              },
+            }}
           />
 
           <div
@@ -104,7 +128,7 @@ const Step3 = ({
           >
             {processKeywordsData?.video_file && (
               <Box>
-                <Typography mb={1}>Video</Typography>
+                <Typography mb={1} color={colors.black}>Video</Typography>
                 <video
                   width="100%"
                   height="200px"
@@ -116,7 +140,7 @@ const Step3 = ({
             )}
             {processKeywordsData?.music_file && (
               <Box>
-                <Typography mb={1}>Audio</Typography>
+                <Typography mb={1} color={colors.black}>Audio</Typography>
                 <audio
                   width="100%"
                   controls

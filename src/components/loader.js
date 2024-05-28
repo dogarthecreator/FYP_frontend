@@ -1,31 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
 
-const Loader = () => (
-  <svg
-    version="1.1"
-    id="L9"
-    x="0px"
-    y="0px"
-    viewBox="0 0 100 100"
-    width="100"
-    height="100"
-    style={{ enableBackground: "new 0 0 0 0" }}
-  >
-    <path
-      fill="#9ffe27"
-      d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+const Loader = () => {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const duration = 75; // Duration in seconds
+    const interval = 100; // Interval in milliseconds (0.1 second)
+    const totalSteps = (duration * 1000) / interval; // Total number of steps
+
+    let step = 0;
+    const timer = setInterval(() => {
+      step += 1;
+      const percentage = Math.min((step / totalSteps) * 100, 100);
+      setProgress(percentage);
+
+      if (step >= totalSteps) {
+        clearInterval(timer);
+      }
+    }, interval);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      position="relative"
+      width="100px"
+      height="100px"
     >
-      <animateTransform
-        attributeName="transform"
-        attributeType="XML"
-        type="rotate"
-        dur="1s"
-        from="0 50 50"
-        to="360 50 50"
-        repeatCount="indefinite"
+      <CircularProgress
+        variant="determinate"
+        value={progress}
+        size={100}
+        thickness={4}
+        sx={{ color: '#6d6d6d' }} // Updated color
       />
-    </path>
-  </svg>
-);
+      <Box
+        top={0}
+        left={0}
+        bottom={0}
+        right={0}
+        position="absolute"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography
+          variant="caption"
+          component="div"
+          color="textSecondary"
+        >{`${Math.round(progress)}%`}</Typography>
+      </Box>
+    </Box>
+  );
+};
 
 export default Loader;

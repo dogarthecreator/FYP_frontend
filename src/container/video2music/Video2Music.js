@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography, Stack } from '@mui/material';
-import { Stepper, Step, StepLabel, StepConnector } from '@mui/material';
+import { Box, Button, Typography, Stack, Stepper, Step, StepLabel, StepConnector } from '@mui/material';
 import { styled } from '@mui/system';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
@@ -19,28 +18,44 @@ const steps = [
   'Video Download',
 ];
 
+// Color palette
+const colors = {
+  white: '#f8f9fa',
+  lightGray: '#f8f8f8',
+  gray: '#e9ecef',
+  mediumGray: '#dee2e6',
+  midDarkGray: '#ced4da',
+  darkGray: '#adb5bd',
+  darkerGray: '#6c757d',
+  darkestGray: '#495057',
+  black: '#212529',
+};
+
+// Custom styling for the StepConnector component
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
   '&.MuiStepConnector-root': {
-    top: 10,
-    left: 'calc(-50% + 16px)',
-    right: 'calc(50% + 16px)',
+    top: 10, // Adjust the position
+    left: 'calc(-50% + 16px)', // Adjust the position
+    right: 'calc(50% + 16px)', // Adjust the position
   },
   '& .MuiStepConnector-line': {
-    borderColor: '#eaeaf0',
-    borderTopWidth: 2,
+    borderColor: colors.mediumGray, // Change the color of the connector line
+    borderTopWidth: 2, // Change the width of the connector line
   },
 }));
 
+// Custom styling for the StepIcon component
 const CustomStepIconRoot = styled('div')(({ theme, ownerState }) => ({
-  color: ownerState.active ? '#9FFE27' : '#eaeaf0', // Change active color to green
-  display: 'flex',
-  height: 22,
-  alignItems: 'center',
+  color: ownerState.active ? colors.black : colors.mediumGray, // Change the color based on the active state
+  display: 'flex', // Flex display to align items
+  height: 22, // Set height
+  alignItems: 'center', // Center align items
   ...(ownerState.completed && {
-    color: '#9FFE27', // Change completed color to green
+    color: colors.black, // Change color if step is completed
   }),
 }));
 
+// Custom StepIcon component
 function CustomStepIcon(props) {
   const { active, completed, className } = props;
 
@@ -55,7 +70,7 @@ function CustomStepIcon(props) {
 }
 
 const Video2Music = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(3);
   const [progress, setProgress] = useState(0);
   const [keywords, setKeywords] = useState([]);
   const [volume, setVolume] = useState(50);
@@ -81,7 +96,7 @@ const Video2Music = () => {
     if (files[0]) {
       uploadFile(files[0]);
     }
-    setProgress(40); // simulate upload progress
+    setProgress(0); // reset progress
   };
 
   const addKeyword = keyword => {
@@ -106,11 +121,20 @@ const Video2Music = () => {
       setIsUploading(true);
       const formData = new FormData();
       formData.append('file', file);
-      const response = await axiosInstance.post('/myapp/upload/', formData, {
+      
+      const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      });
+        onUploadProgress: progressEvent => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          setProgress(percentCompleted); // update progress
+        },
+      };
+
+      const response = await axiosInstance.post('/myapp/upload/', formData, config);
       if (response?.data?.success) {
         const key = response?.data?.keywords?.split(',').map(str => str.trim());
         setKeywords(key);
@@ -128,7 +152,7 @@ const Video2Music = () => {
   const processKeywords = async () => {
     try {
       setIsContinueDisabled(true);
-      showNotification("success",'Audio is being generated')
+      showNotification("success",'Audio is being generated');
       setIsLoader(true);
       const formData = new FormData();
       formData.append('music_prompt', responseData?.music_prompt);
@@ -157,7 +181,6 @@ const Video2Music = () => {
       setIsContinueDisabled(false);
     }
   };
-
 
   const generateFinalVideo = async () => {
     try {
@@ -205,15 +228,25 @@ const Video2Music = () => {
   return (
     <Box
       display="flex"
-      flexDirection="column"
+      justifyContent="center"
       alignItems="center"
-      bgcolor="#343434"
-      color="white"
       height="100vh"
+      bgcolor={colors.white} // Set background color of the container
+      color="white"
+      overflow="hidden"
     >
-      <Box width="80%" bgcolor="gray.900">
-        <Box mb={4} mt={5} display="flex" justifyContent="center">
-          <img src={logo} alt="Video2Music" />
+      <Box
+        width="100%"
+        maxWidth="1000px"
+        height="100vh"
+        bgcolor={colors.white} // Set background color of the inner box
+        color={colors.black} // Set text color of the inner box
+        borderRadius="24px" // Set border radius of the inner box
+        p={4} // Set padding of the inner box
+        boxShadow="0 4px 12px rgba(0, 0, 0, 0.1)" // Set box shadow of the inner box
+      >
+        <Box mb={4} mt={5} display="flex" justifyContent="center" bgcolor={colors.white}>
+          <img src={logo} alt="Video2Music" style={{ width: '200px', height: 'auto',  }} />
         </Box>
         <Stepper
           alternativeLabel
@@ -223,6 +256,7 @@ const Video2Music = () => {
           {steps.map((label, index) => (
             <Step
               key={label}
+              completed={index <= activeStep} // Ensure step is checked
               onClick={() => {
                 if (!isUploaded) {
                   return;
@@ -233,7 +267,7 @@ const Video2Music = () => {
               <StepLabel StepIconComponent={CustomStepIcon}>
                 <Typography
                   variant="caption"
-                  color={index === activeStep ? '#9FFE27' : 'white'}
+                  color={index === activeStep ? colors.darkestGray : colors.darkerGray} // Change color based on active step
                 >
                   {label}
                 </Typography>
@@ -250,6 +284,7 @@ const Video2Music = () => {
             activeStep={activeStep}
             handleFileUpload={handleFileUpload}
             handleFileUploading={handleFileUploading}
+            progress={progress} // Pass the progress state
           />
 
           <Step2
@@ -273,42 +308,42 @@ const Video2Music = () => {
             videoFile={videoFile}
             finalVideoData={finalVideoData}
             setActiveStep={setActiveStep}
-        setProgress={setProgress}
-        setKeywords={setKeywords}
-        setVolume={setVolume}
-        setVideoFile={setVideoFile}
-        setIsUploaded={setIsUploaded}
-        setIsUploading={setIsUploading}
-        setResponseData={setResponseData}
-        setIsContinueDisabled={setIsContinueDisabled}
-        setFinalVideoData={setFinalVideoData}
-        setIsLoader={setIsLoader}
-        setProcessKeywordsData={setProcessKeywordsData}
+            setProgress={setProgress}
+            setKeywords={setKeywords}
+            setVolume={setVolume}
+            setVideoFile={setVideoFile}
+            setIsUploaded={setIsUploaded}
+            setIsUploading={setIsUploading}
+            setResponseData={setResponseData}
+            setIsContinueDisabled={setIsContinueDisabled}
+            setFinalVideoData={setFinalVideoData}
+            setIsLoader={setIsLoader}
+            setProcessKeywordsData={setProcessKeywordsData}
           />
         </Stack>
+
         <Box textAlign="end" mt={5} mb={5}>
           {activeStep < steps.length - 1 && (
             <Button
-              style={{ color: 'black', backgroundColor: '#9FFE27' }}
+              style={{ color: colors.white, backgroundColor: colors.darkestGray }} // Set button text and background color
               variant="contained"
               disabled={isUploading || isContinueDisabled}
               sx={{
-                bgcolor: '#9FFE27',
-                color: '#000000',
-                fontWeight: '600',
-                fontSize: '18px',
-                lineHeight: '20px',
-                textTransform: 'unset',
-                padding:"8px",
+                bgcolor: colors.darkestGray, // Set button background color
+                color: colors.white, // Set button text color
+                fontWeight: '600', // Set button text font weight
+                fontSize: '18px', // Set button text font size
+                lineHeight: '20px', // Set button text line height
+                textTransform: 'unset', // Prevent text transformation
+                padding: "8px", // Set button padding
                 '&:hover': {
-                  bgcolor: '#9FFE27',
-                  color: '#000000',
+                  bgcolor: colors.darkerGray, // Set button background color on hover
+                  color: colors.darkestGray, // Set button text color on hover
                 },
                 '&.Mui-disabled': {
-                  backgroundColor: 'grey !important', // Change disabled button color to grey
+                  backgroundColor: colors.gray + ' !important', // Change disabled button color to gray
                 },
               }}
-              
               onClick={() => {
                 if (activeStep === 1) {
                   if (Object.keys(processKeywordsData).length === 0) {
@@ -326,7 +361,7 @@ const Video2Music = () => {
                   }
                   return;
                 }
-                if(Object.keys(responseData).length !== 0){
+                if (Object.keys(responseData).length !== 0) {
                   handleContinue();
                 }
               }}
@@ -335,7 +370,6 @@ const Video2Music = () => {
             </Button>
           )}
         </Box>
-
       </Box>
     </Box>
   );
