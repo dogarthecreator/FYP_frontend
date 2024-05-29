@@ -203,12 +203,10 @@ const Step1 = ({
               color={colors.darkestGray} // Updated text color
               height="304px"
             >
-              <Typography variant="h4" mb={2} color={colors.black}> {/* Updated text color */}
-                Video2Music
+              <Typography variant="h5" mb={2} color={colors.black}> {/* Updated text color */}
+              Personalized Soundtracks, Made Just for Your Videos
               </Typography>
-              <Typography variant="subtitle1" mb={2}> {/* Updated text color */}
-                Personalized Soundtracks, Made Just for Your Videos
-              </Typography>
+
               <Box
                 p={2}
                 mb={2}

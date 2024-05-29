@@ -70,7 +70,7 @@ function CustomStepIcon(props) {
 }
 
 const Video2Music = () => {
-  const [activeStep, setActiveStep] = useState(3);
+  const [activeStep, setActiveStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [keywords, setKeywords] = useState([]);
   const [volume, setVolume] = useState(50);
